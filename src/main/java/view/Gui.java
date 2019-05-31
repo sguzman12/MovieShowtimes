@@ -35,9 +35,9 @@ public class Gui extends JFrame
 	private JTable table; // Display out movie title, times.
 	private DefaultTableModel model;
 
-	private final String columnNames[] = { "Title", "Showtimes" }; // Columns
-																	// Names for
-																	// table
+	private String columnNames[] = { "Title", "Showtimes" }; // Columns
+																// Names for
+																// table
 	private String data[][];
 
 	private final int WIDTH = 400;
@@ -46,33 +46,34 @@ public class Gui extends JFrame
 	public Gui()
 	{
 		frame = new JFrame();
-		
+
 		frame.setTitle("Local Movie Showtimes");
 		frame.setSize(WIDTH, HEIGHT);
 		frame.setLayout(new BorderLayout());
-		
+
 		initialize();
 
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-		
+
 	}
 
 	private void initialize()
 	{
 		panel1 = panelInitialize(panel1);
-		//panel1.setBackground(Color.BLACK);
-		table = tableInitialize(table);
+		// panel1.setBackground(Color.BLACK);
+		tableInitialize();
+
 		addTables(table);
 		// refresh = buttonInitialize(refresh, "Refresh");
 		// addButtons();
-		
+
 		addPanels();
 	}
 
 	private void addPanels()
 	{
-		//frame.setLayout(new GridLayout(1, 2));
+		// frame.setLayout(new GridLayout(1, 2));
 		frame.add(panel1);
 	}
 
@@ -85,13 +86,13 @@ public class Gui extends JFrame
 	}
 
 	@SuppressWarnings("serial")
-	private JTable tableInitialize(JTable table)
+	private void tableInitialize()
 	{
 
-		model = new DefaultTableModel(data, columnNames);
+		model = new DefaultTableModel(columnNames, 0);
 
 		table = new JTable(model)
-		
+
 		{
 
 			public Component prepareRenderer(TableCellRenderer r, int data,
@@ -110,25 +111,21 @@ public class Gui extends JFrame
 				return c;
 			}
 		};
-		
+
 		table.setPreferredScrollableViewportSize(new Dimension(200, 100));
 		table.setFillsViewportHeight(true);
-		return table;
+		//return table;
 	}
 
-	private JButton buttonInitialize(JButton but, String title)
-	{
-
-		but = new JButton(title);
-
-		return but;
-	}
-
-	private void addButtons()
-	{
-		panel1.add(refresh);
-	}
-
+	/**
+	 * private JButton buttonInitialize(JButton but, String title) {
+	 * 
+	 * but = new JButton(title);
+	 * 
+	 * return but; }
+	 * 
+	 * private void addButtons() { panel1.add(refresh); }
+	 */
 	private void addTables(JTable table)
 	{
 		panel1.add(table);
