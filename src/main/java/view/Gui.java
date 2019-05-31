@@ -1,10 +1,17 @@
 package view;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.GridLayout;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 
 /**
  * PROJECT: Maven springboot webscraper for local movie times in my area.
@@ -21,38 +28,51 @@ public class Gui extends JFrame
 	 */
 	private static final long serialVersionUID = -2504766583330583148L;
 
-	JFrame frame;
-	JPanel panel1;
-	JPanel panel2;
-	JButton refresh;
+	private JFrame frame;
+	private JPanel panel1; // Main panel holding the table
+	private JPanel panel2;
+	private JButton refresh; // Refreshes table
+	private JTable table; // Display out movie title, times.
+	private DefaultTableModel model;
+
+	private final String columnNames[] = { "Title", "Showtimes" }; // Columns
+																	// Names for
+																	// table
+	private String data[][];
 
 	private final int WIDTH = 400;
 	private final int HEIGHT = 500;
-	private final float hsb[] = new float[] { 64, 92, 86 };
 
 	public Gui()
 	{
 		frame = new JFrame();
+		
 		frame.setTitle("Local Movie Showtimes");
 		frame.setSize(WIDTH, HEIGHT);
-
+		frame.setLayout(new BorderLayout());
+		
 		initialize();
-		addPanels();
+
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		
 	}
 
 	private void initialize()
 	{
 		panel1 = panelInitialize(panel1);
-		panel1.setBackground(Color.GRAY);
+		//panel1.setBackground(Color.BLACK);
+		table = tableInitialize(table);
+		addTables(table);
+		// refresh = buttonInitialize(refresh, "Refresh");
+		// addButtons();
 		
-		refresh = buttonInitialize(refresh, "Refresh");
-		addButtons();
+		addPanels();
 	}
 
 	private void addPanels()
 	{
+		//frame.setLayout(new GridLayout(1, 2));
 		frame.add(panel1);
 	}
 
@@ -63,15 +83,54 @@ public class Gui extends JFrame
 
 		return panel;
 	}
-	
-	private JButton buttonInitialize(JButton but, String title) {
+
+	@SuppressWarnings("serial")
+	private JTable tableInitialize(JTable table)
+	{
+
+		model = new DefaultTableModel(data, columnNames);
+
+		table = new JTable(model)
 		
+		{
+
+			public Component prepareRenderer(TableCellRenderer r, int data,
+					int columns)
+			{
+				Component c = super.prepareRenderer(r, data, columns);
+
+				if(data % 2 == 0)
+				{
+					c.setBackground(Color.WHITE);
+				}
+				else
+				{
+					c.setBackground(Color.LIGHT_GRAY);
+				}
+				return c;
+			}
+		};
+		
+		table.setPreferredScrollableViewportSize(new Dimension(200, 100));
+		table.setFillsViewportHeight(true);
+		return table;
+	}
+
+	private JButton buttonInitialize(JButton but, String title)
+	{
+
 		but = new JButton(title);
-		
+
 		return but;
 	}
-	
-	private void addButtons() {
+
+	private void addButtons()
+	{
 		panel1.add(refresh);
+	}
+
+	private void addTables(JTable table)
+	{
+		panel1.add(table);
 	}
 }
